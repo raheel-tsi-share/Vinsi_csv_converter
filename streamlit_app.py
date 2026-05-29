@@ -520,10 +520,10 @@ if uploaded:
     if mode == "Batch Phone Import":
         col1, col2 = st.columns(2)
         with col1:
+            name_format = st.radio("Name format", ["Full Name Column", "Separate First / Last Name Columns"])
             phone_col = st.selectbox("Phone number column", columns)
-            name_format = st.radio("Name format", ["Full name column", "First + Last columns"])
         with col2:
-            if name_format == "Full name column":
+            if name_format == "Full Name Column":
                 name_col = st.selectbox("Name column", columns)
                 first_name_col = last_name_col = ""
             else:
@@ -532,9 +532,9 @@ if uploaded:
                 last_name_col = st.selectbox("Last name column", columns)
 
         extra_cols = st.multiselect("Extra columns to include (optional)", columns)
-        dedup = st.selectbox("Deduplicate by", ["None", "Phone numbers", "Names"])
+        dedup = st.selectbox("Remove Duplicates By", ["None", "Phone numbers", "Names"])
         dedup_key = {"None": "none", "Phone numbers": "phones", "Names": "names"}[dedup]
-        nf_key = "first_last" if name_format == "First + Last columns" else "full"
+        nf_key = "first_last" if name_format == "Separate First / Last Name Columns" else "full"
 
         if st.button("Convert", type="primary"):
             count, skipped, failed, csv_bytes = process_batch(
@@ -554,22 +554,22 @@ if uploaded:
     elif mode == "Email Campaign":
         col1, col2 = st.columns(2)
         with col1:
+            name_format = st.radio("Name format", ["Separate First / Last Name Columns", "Full Name Column (split)", "No name"])
             email_col = st.selectbox("Email column", columns)
-            name_format = st.radio("Name format", ["First + Last columns", "Split full name", "No name"])
         with col2:
-            if name_format == "First + Last columns":
+            if name_format == "Separate First / Last Name Columns":
                 first_name_col = st.selectbox("First name column", columns)
                 last_name_col = st.selectbox("Last name column", columns)
                 full_name_col = ""
-            elif name_format == "Split full name":
+            elif name_format == "Full Name Column (split)":
                 full_name_col = st.selectbox("Full name column (will be split)", columns)
                 first_name_col = last_name_col = ""
             else:
                 first_name_col = last_name_col = full_name_col = ""
 
-        dedup = st.selectbox("Deduplicate by", ["None", "Email addresses"])
+        dedup = st.selectbox("Remove Duplicates By", ["None", "Email addresses"])
         dedup_key = "emails" if dedup == "Email addresses" else "none"
-        nf_key = {"Split full name": "split", "First + Last columns": "separate", "No name": "none"}[name_format]
+        nf_key = {"Full Name Column (split)": "split", "Separate First / Last Name Columns": "separate", "No name": "none"}[name_format]
 
         if st.button("Convert", type="primary"):
             count, skipped, failed, csv_bytes = process_email(
@@ -589,23 +589,23 @@ if uploaded:
     else:
         col1, col2 = st.columns(2)
         with col1:
+            name_format = st.radio("Name format", ["Separate First / Last Name Columns", "Full Name Column (split)", "No name"])
             email_col = st.selectbox("Email column", columns)
-            name_format = st.radio("Name format", ["First + Last columns", "Split full name", "No name"])
         with col2:
-            if name_format == "First + Last columns":
+            if name_format == "Separate First / Last Name Columns":
                 first_name_col = st.selectbox("First name column", columns)
                 last_name_col = st.selectbox("Last name column", columns)
                 full_name_col = ""
-            elif name_format == "Split full name":
+            elif name_format == "Full Name Column (split)":
                 full_name_col = st.selectbox("Full name column (will be split)", columns)
                 first_name_col = last_name_col = ""
             else:
                 first_name_col = last_name_col = full_name_col = ""
 
         extra_cols = st.multiselect("Extra columns to include (optional)", columns)
-        dedup = st.selectbox("Deduplicate by", ["None", "Email addresses"])
+        dedup = st.selectbox("Remove Duplicates By", ["None", "Email addresses"])
         dedup_key = "emails" if dedup == "Email addresses" else "none"
-        nf_key = {"Split full name": "split", "First + Last columns": "separate", "No name": "none"}[name_format]
+        nf_key = {"Full Name Column (split)": "split", "Separate First / Last Name Columns": "separate", "No name": "none"}[name_format]
 
         if st.button("Convert", type="primary"):
             count, skipped, failed, csv_bytes = process_contact(
