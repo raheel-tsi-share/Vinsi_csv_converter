@@ -207,6 +207,7 @@ def process_contact(file_bytes, filename, email_col, name_format,
 st.set_page_config(page_title="VINSI CSV Formatter", page_icon="📋", layout="centered")
 
 st.title("VINSI CSV Formatter")
+st.write("Convert external contact spreadsheet files into the format required by VINSI services.")
 
 mode = st.radio(
     "What would you like to create?",
@@ -214,7 +215,7 @@ mode = st.radio(
     horizontal=True,
 )
 
-uploaded = st.file_uploader("Upload your LineLeader export", type=["xlsx", "csv"])
+uploaded = st.file_uploader("Upload your CSV or Excel file", type=["xlsx", "csv"])
 
 if uploaded:
     file_bytes = uploaded.read()
